@@ -1,0 +1,26 @@
+{
+    "class": "FAQ",
+    "vectorizer": "text2vec-openai",
+    "properties": [
+      {
+        "name": "question",
+        "dataType": ["text"],
+        "moduleConfig": {
+          "text2vec-openai": {
+            "skip": false
+          }
+        },
+        "indexInverted": true
+      },
+      {
+        "name": "answer",
+        "dataType": ["text"],
+        "moduleConfig": {
+          "text2vec-openai": {
+            "skip": true
+          }
+        }
+      }
+    ]
+  }
+  

@@ -1,0 +1,5 @@
+terraform.tfvars
+weaviate-key-pair.pem
+.terraform/
+*.tfstate
+*.tfstate.backup
