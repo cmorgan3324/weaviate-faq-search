@@ -1,7 +1,7 @@
-FAQ Semantic Search Platform *(powered by Weaviate & OpenAI)*
+FAQ Semantic Search Platform Demo *(powered by Weaviate & OpenAI)*
 ============================
 
-I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build a scalable, AI-powered FAQ search system on AWS using Terraform, Weaviate, OpenAI, and Streamlit. This project showcases end-to-end infrastructure-as-code, real-time vector embeddings, containerization of services (Docker) and a polished front-end. 
+I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build a scalable, AI-powered FAQ search system on AWS using Terraform, Weaviate, OpenAI, and Streamlit. For this POC, I based the search system on a FAQs regarding the AWS Cloud. This project showcases end-to-end infrastructure-as-code, real-time vector embeddings, containerization of services (Docker) and a polished front-end.
 
 🔍 Project Overview
 -------------------
@@ -48,7 +48,7 @@ I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build
 🚀 Tech Stack
 -------------
 
--   **AWS**: EC2, S3, IAM, Security Groups
+-   **AWS**: EC2, S3, IAM
 
 -   **Terraform**: Declarative infrastructure provisioning
 
@@ -74,12 +74,12 @@ I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build
 
 -   **Pure-Vector Search** (`nearText`):
 
-    -   Enter a conversational query (e.g., "How can I recover my account?").
+    -   Enter a conversational query (e.g., "What is Amazon S3?").
 
     -   Returns semantically closest FAQs but may not always match exact keywords.
 
 -   **Hybrid Search** (`BM25 + vector`):
 
-    -   Ideal for precise, keyword-driven queries (e.g., "How do I reset my password?").
+    -   Ideal for precise, keyword-driven queries (e.g., "How do I launch an EC2 instance?").
 
     -   Combining BM25 reduces false positives and surfaces exact matches.

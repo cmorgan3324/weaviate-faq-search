@@ -115,7 +115,6 @@ resource "aws_instance" "weaviate_server" {
       semitechnologies/weaviate:latest
 
     # 6) (Optional) Wait a few seconds, then import the CSV into Weaviate
-    #    (We’ll cover the exact ingestion step in Step 5, but here’s one way):
     # sleep 15
     # curl -X POST "http://localhost:8080/v1/meta" \
     #      -H "Content-Type: application/json" \
