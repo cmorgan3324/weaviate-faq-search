@@ -16,6 +16,10 @@ I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build
 
     3.  Hybrid (BM25 + vector) and pure-vector search via a Streamlit UI.
 
+    **Architecture Diagram**
+
+    ![FAQ Semantic Search Diagram](/Users/corymorgan/Documents/aws-projects/weviate-faq-search/weaviate-faq-search.png)
+
 🎯 Key Features
 ---------------
 
