@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-WEAVIATE_URL = "http://54.156.55.237:8080" # Update Weaviate IP
+WEAVIATE_URL = "http://35.174.0.184:8080" # Update Weaviate IP
 
 
 # page config & headers

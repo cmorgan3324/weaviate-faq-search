@@ -1,0 +1,214 @@
+{
+  "objects": [
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon S3?",
+        "answer": "Amazon S3 (Simple Storage Service) is an object storage service that provides industry-leading scalability, data availability, security, and performance. You can store and retrieve any amount of data from anywhere on the web."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What are the different Amazon S3 storage classes?",
+        "answer": "S3 storage classes include Standard for general-purpose, Intelligent-Tiering for automatic cost optimization, Standard-Infrequent Access for long-lived but infrequently accessed data, One Zone-Infrequent Access for lower-cost infrequently accessed data in a single Availability Zone, Glacier for archival, and Glacier Deep Archive for long-term data retention at the lowest cost."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How do I launch an EC2 instance?",
+        "answer": "To launch an EC2 instance, open the EC2 console, click 'Launch Instance', choose an Amazon Machine Image (AMI), select an instance type, configure instance details (VPC, subnets, storage, tags), configure security group, and then click 'Launch' and select or create an SSH key pair."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is an AWS EC2 instance type?",
+        "answer": "EC2 instance types define the hardware of the host computer used for running your instance. They offer different combinations of CPU, memory, storage, and networking capacity, optimized for different use cases such as compute-optimized, memory-optimized, storage-optimized, and general-purpose."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "Can you explain AWS Lambda?",
+        "answer": "AWS Lambda is a serverless compute service that lets you run code without provisioning or managing servers. It automatically scales from a few requests per day to thousands per second and charges only for compute time consumed during code execution."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How does AWS Lambda handle scaling under heavy load?",
+        "answer": "Lambda automatically scales by running multiple function instances in parallel to match the number of incoming requests. Concurrency limits can be configured, and provisioned concurrency can be used to reduce cold starts."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon RDS?",
+        "answer": "Amazon RDS (Relational Database Service) is a managed service that makes it easy to set up, operate, and scale a relational database in the cloud. It supports multiple database engines such as MySQL, PostgreSQL, Oracle, SQL Server, and Amazon Aurora, handling tedious tasks like patching, backups, and replication."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "When should I use Amazon RDS versus DynamoDB?",
+        "answer": "Use RDS for structured, relational data with complex queries and transactions. Choose DynamoDB for high-scale, low-latency NoSQL workloads, key-value or document-based data models, and when you need seamless scalability without managing database servers."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon DynamoDB?",
+        "answer": "Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. It stores data as items in tables, supports key-value and document models, and offers built-in backup, restore, and in-memory caching with DynamoDB Accelerator (DAX)."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How does DynamoDB partition data?",
+        "answer": "DynamoDB partitions data based on the partition key. It distributes items across multiple partitions to meet throughput requirements. Each partition can hold up to 10 GB of data and offers a maximum of 3,000 read capacity units or 1,000 write capacity units."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is AWS IAM used for?",
+        "answer": "AWS IAM (Identity and Access Management) enables you to securely control access to AWS services and resources. You can create users, groups, and roles, and define permission policies to allow or deny specific API actions on resources."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How do I create an IAM role for an EC2 instance?",
+        "answer": "To create an IAM role for EC2, open the IAM console, click 'Roles', then 'Create role', select EC2 as the trusted entity, attach the required policies (e.g., AmazonS3ReadOnly), name the role, and launch or attach it to your EC2 instance during or after instance creation."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is an Amazon VPC?",
+        "answer": "Amazon VPC (Virtual Private Cloud) lets you provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network. You have full control over your network environment, including IP address ranges, subnets, route tables, and gateways."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How can I set up private and public subnets in a VPC?",
+        "answer": "Create a VPC with a CIDR block, then create two subnets: one public (with auto-assigned public IPs) and one private. Attach an Internet Gateway to the VPC and update the public subnet’s route table to point to the Internet Gateway. The private subnet’s route table remains without an Internet Gateway route."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is AWS CloudFormation?",
+        "answer": "AWS CloudFormation is a service that helps you model and set up your AWS resources using JSON or YAML templates. It provisions and configures resources in a safe, repeatable manner and supports updates, rollbacks, and dependency management."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How do I write a CloudFormation template?",
+        "answer": "A CloudFormation template is written in JSON or YAML and defines resources, parameters, mappings, conditions, and outputs. Specify AWS resource types (e.g., AWS::EC2::Instance), their properties, and any dependencies. Then deploy via console, CLI, or SDK."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What does Amazon CloudFront do?",
+        "answer": "Amazon CloudFront is a global content delivery network (CDN) that securely delivers data, videos, applications, and APIs with low latency and high transfer speeds. It caches content at edge locations worldwide and integrates with other AWS services like S3 and EC2."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How does CloudFront caching work?",
+        "answer": "CloudFront caches content at its edge locations based on cache-control headers, object expiry settings, and invalidation requests. When a viewer requests content, CloudFront serves it from the nearest edge location if cached; otherwise, it retrieves it from the origin."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is AWS Auto Scaling?",
+        "answer": "AWS Auto Scaling monitors your applications and automatically adjusts EC2 instance capacity to maintain steady, predictable performance at the lowest possible cost. It can scale out or scale in based on defined scaling policies and metrics."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How do I configure Auto Scaling policies?",
+        "answer": "In the Auto Scaling console, create an Auto Scaling group, define launch configurations or templates, set minimum, desired, and maximum instance counts, and create scaling policies (e.g., target tracking or step scaling) based on metrics like CPU usage or request count."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon SNS?",
+        "answer": "Amazon SNS (Simple Notification Service) is a fully managed messaging service for application-to-application (A2A) and application-to-person (A2P) communication. It uses topics for publish-subscribe messaging, delivering notifications via HTTP/S, email, SMS, and mobile push."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How do I send a notification using Amazon SNS?",
+        "answer": "Create an SNS topic, subscribe endpoints (email, HTTP endpoint, or Lambda) to that topic, and publish a message to the topic. Subscribers receive the notification based on their subscription protocol."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon SQS?",
+        "answer": "Amazon SQS (Simple Queue Service) is a fully managed message queuing service that decouples and scales microservices, distributed systems, and serverless applications. It offers at-least-once message delivery and supports Standard (unlimited throughput, best-effort ordering) and FIFO queues (exactly-once processing, ordered delivery)."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is the difference between Amazon SNS and SQS?",
+        "answer": "SNS is a pub/sub messaging service for pushing notifications to multiple subscribers, while SQS is a queue service for decoupling application components where messages are processed by a single consumer. SNS broadcasts messages; SQS stores messages until processed."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon EBS?",
+        "answer": "Amazon EBS (Elastic Block Store) provides persistent block storage volumes for EC2 instances. EBS volumes are durable, offer point-in-time snapshots, and can be attached to a single EC2 instance in the same Availability Zone. They support various volume types (GP3, GP2, IO1, IO2, ST1, SC1) optimized for performance and cost."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How can I create a snapshot of an EBS volume?",
+        "answer": "In the EC2 console, navigate to 'Volumes', select the volume, click 'Actions' → 'Create Snapshot', provide a description, and click 'Create Snapshot'. You can also automate snapshots using AWS Backup or lifecycle policies."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is Amazon CloudWatch for monitoring?",
+        "answer": "Amazon CloudWatch is a monitoring and observability service that collects metrics, logs, and events from AWS resources and applications. It enables you to set alarms, visualize data in dashboards, and take automated actions like scaling or notifications."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "How do I set up a CloudWatch alarm for CPU utilization?",
+        "answer": "In CloudWatch, go to 'Alarms' → 'Create Alarm', select the EC2 CPUUtilization metric, define threshold (e.g., >80% for 5 minutes), configure actions (e.g., send SNS notification or trigger Auto Scaling), and specify alarm name and description."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "What is AWS CloudTrail used for?",
+        "answer": "AWS CloudTrail logs all API calls and user activity in your AWS account, providing event history for governance, compliance, risk auditing, and operational troubleshooting. It captures calls from the AWS Management Console, SDKs, CLI, and other services."
+      }
+    },
+    {
+      "class": "FAQ",
+      "properties": {
+        "question": "Why should I enable AWS CloudTrail?",
+        "answer": "Enabling CloudTrail provides visibility into user and API activity, helps detect unauthorized access, supports compliance requirements, and allows auditing of changes to AWS resources for security governance."
+      }
+    }
+  ]
+}

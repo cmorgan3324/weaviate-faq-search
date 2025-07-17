@@ -1,6 +1,6 @@
 # create an iam role that ec2 can assume
 resource "aws_iam_role" "streamlit_ec2_role" {
-  name = "streamlit-ec2-role"
+  name               = "streamlit-ec2-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -20,7 +20,7 @@ EOF
 resource "aws_iam_policy" "ecr_read_only" {
   name        = "ECRReadOnlyPolicy"
   description = "Allow pulling images from ECR"
-  policy = <<EOF
+  policy      = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -72,10 +72,10 @@ resource "aws_security_group" "streamlit_sg" {
     from_port   = 8501
     to_port     = 8501
     protocol    = "tcp"
-    cidr_blocks = ["97.133.246.77/32"]
+    cidr_blocks = ["97.133.245.33/32"]
   }
 
-    ingress {
+  ingress {
     description = "Streamlit UI (port 8501) from anywhere"
     from_port   = 8501
     to_port     = 8501
@@ -88,7 +88,7 @@ resource "aws_security_group" "streamlit_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["97.133.246.77/32"]
+    cidr_blocks = ["97.133.245.33/32"]
   }
 
   egress {
@@ -102,10 +102,10 @@ resource "aws_security_group" "streamlit_sg" {
 
 # Streamlit ec2 instance
 resource "aws_instance" "streamlit_server" {
-  ami                         = data.aws_ami.amazon_linux.id 
+  ami                         = data.aws_ami.amazon_linux.id
   instance_type               = "t3.medium"
   subnet_id                   = data.aws_subnets.default_subnets.ids[0]
-  vpc_security_group_ids      = [aws_security_group.streamlit_sg.id]  # Or use weaviate_sg.id if reusing
+  vpc_security_group_ids      = [aws_security_group.streamlit_sg.id] # Or use weaviate_sg.id if reusing
   key_name                    = "weaviate-key-pair"
   iam_instance_profile        = aws_iam_instance_profile.streamlit_instance_profile.name
   associate_public_ip_address = true
@@ -129,6 +129,9 @@ resource "aws_instance" "streamlit_server" {
     docker run -d --restart unless-stopped \
       -p 8501:8501 \
       123456789012.dkr.ecr.us-east-1.amazonaws.com/faq-streamlit:latest
+
+
+      
   EOF
 
   tags = {

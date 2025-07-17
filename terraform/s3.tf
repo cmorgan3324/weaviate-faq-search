@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "faq_csv_bucket" {
-  bucket = "weaviate-faq-csv-v24"
+  bucket        = "weaviate-faq-csv-v24"
   force_destroy = true
   tags = {
     Name        = "weaviate-faq-csv-bucket"
