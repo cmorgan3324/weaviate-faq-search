@@ -1,8 +1,8 @@
-import streamlit as st
+import os
 import requests
+import streamlit as st
 
-WEAVIATE_URL = "http://35.174.0.184:8080" # Update Weaviate IP
-
+WEAVIATE_URL = os.getenv("WEAVIATE_URL", "http://localhost:8080")
 
 # page config & headers
 st.set_page_config(
@@ -16,7 +16,7 @@ st.title("FAQ Semantic Search")
 st.subheader("Interactive FAQ lookup powered by Weaviate & OpenAI embeddings")
 
 # query input area
-query = st.text_input("Ask a question:")
+query = st.text_input("Ask a question about AWS...")
 
 # hybrid toggle
 hybrid = st.checkbox("Use Hybrid Search (BM25 + Vector)", value=False)

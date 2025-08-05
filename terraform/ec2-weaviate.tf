@@ -18,37 +18,24 @@ resource "aws_security_group" "weaviate_sg" {
   description = "allow inbound http (8080) for Weaviate"
   vpc_id      = data.aws_vpc.default.id
 
-  ingress {
-    description      = "Weaviate api (port 8080) from anywhere"
-    from_port        = 8080
-    to_port          = 8080
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
+
+ ingress {
+   description = "Weaviate API (8080) from Streamlit"
+   from_port   = 8080
+   to_port     = 8080
+   protocol    = "tcp"
+   security_groups = [aws_security_group.streamlit_sg.id] 
+}
+
 
   ingress {
     description = "ssh from my ip"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["97.133.245.33/32"]
-  }
-  ingress {
-    description = "inbound 8080 from my ip"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["97.133.245.33/32"]
+    cidr_blocks = ["97.133.199.209/32"]
   }
 
-  ingress {
-    description = "allow Streamlit port 8501"
-    from_port   = 8501
-    to_port     = 8501
-    protocol    = "tcp"
-    cidr_blocks = ["54.173.126.22/32"]
-  }
 
   egress {
     description = "allow all outbound"
@@ -78,116 +65,84 @@ resource "aws_instance" "weaviate_server" {
     Name = "weaviate-server"
   }
 
-  # -------------------------
-  # User Data: Install Docker & Start Weaviate
-  # -------------------------
-  #   user_data = <<-EOF
-  #     #!/bin/bash
-  #     set -e
+   user_data = <<-EOF
+    #!/bin/bash
+    set -eux
 
-  #     # 1) Update system & install Docker
-  #     yum update -y
-  #     amazon-linux-extras install docker -y
-  #     service docker start
-  #     usermod -a -G docker ec2-user
+    # 1️⃣ Install Docker & AWS CLI v2 (curl comes pre-installed)
+    yum update -y
+    amazon-linux-extras install -y docker
+    yum install -y docker
+    systemctl enable docker
+    systemctl start docker
 
-  #     # 2) Install AWS CLI v2 (to pull from S3)
-  #     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-  #     unzip /tmp/awscliv2.zip -d /tmp
-  #     /tmp/aws/install
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+    unzip /tmp/awscliv2.zip -d /tmp
+    /tmp/aws/install
 
-  #     # 3) Create a directory for Weaviate data persistence
-  #     mkdir -p /var/lib/weaviate
+    # 2️⃣ Host-side loader script (boot-setup.sh)
+    cat > /usr/local/bin/boot-setup.sh << 'BOOT'
+    #!/bin/bash
+    set -e
 
-  #     # 4) Fetch the FAQ CSV from S3 into /tmp
-  #     aws s3 cp s3://${var.faq_csv_bucket_name}/faqs.csv /tmp/faqs.csv
+    # Fetch latest CSV from S3 (ignore errors)
+    aws s3 cp s3://${var.faq_csv_bucket_name}/faqs.csv /tmp/faqs.csv || true
 
-  #     # 5) Launch Weaviate container with OpenAI module enabled
-  #     docker run -d \
-  #       --name weaviate \
-  #       -p 8080:8080 \
-  #       -e QUERY_DEFAULTS_LIMIT=20 \
-  #       -e AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED="true" \
-  #       -e PERSISTENCE_DATA_PATH="/var/lib/weaviate" \
-  #       -e DEFAULT_VECTORIZER_MODULE="text2vec-openai" \
-  #       -e OPENAI_APIKEY="${var.openai_api_key}" \
-  #       -e S3_BUCKET_NAME="${var.faq_csv_bucket_name}" \
-  #       semitechnologies/weaviate:latest
+    # Create FAQ schema if missing
+    curl -X POST http://localhost:8080/v1/schema \
+      -H 'Content-Type: application/json' \
+      -d @/tmp/faq_schema.json || true
 
-  #     # 6) (Optional) Wait a few seconds, then import the CSV into Weaviate
-  #     # sleep 15
-  #     # curl -X POST "http://localhost:8080/v1/meta" \
-  #     #      -H "Content-Type: application/json" \
-  #     #      -d '{"action": "import", "filePath": "/tmp/faqs.csv", "batchSize": 16, "sep": ","}'
-  #   EOF
-  # }
+    # Batch ingest CSV
+    curl -X POST "http://localhost:8080/v1/batch/objects?batchSize=16&class=FAQ&vectorizer=text2vec-openai" \
+      -H 'Content-Type: text/csv' \
+      --data-binary @/tmp/faqs.csv || true
+    BOOT
+    chmod +x /usr/local/bin/boot-setup.sh
 
-  user_data = <<-EOF
-    #cloud-config
+    # 3️⃣ Write the systemd unit (weaviate.service)
+    cat > /etc/systemd/system/weaviate.service << 'SERVICE'
+    [Unit]
+    Description=Weaviate Vector DB
+    After=network-online.target docker.service
+    Wants=network-online.target docker.service
 
-    # 1) Update & install packages in one atomic phase
-    package_update: true
-    packages:
-      - amazon-linux-extras
-      - docker
+    [Service]
+    Type=oneshot
+    RemainAfterExit=yes
 
-    # 2) Drop in our idempotent boot-setup script
-    write_files:
-      - path: /usr/local/bin/boot-setup.sh
-        owner: root:root
-        permissions: '0755'
-        content: |
-          #!/bin/bash
-          set -e
+    # Remove any old container
+    ExecStartPre=/bin/bash -lc 'docker rm -f weaviate || true'
 
-          # (Re)fetch the latest CSV
-          aws s3 cp s3://${var.faq_csv_bucket_name}/faqs.csv /tmp/faqs.csv || true
+    # Pull & run with healthchecks, then invoke host loader
+    ExecStart=/bin/bash -lc '\
+      docker pull semitechnologies/weaviate:latest && \
+      docker run -d \
+        --name weaviate \
+        --restart unless-stopped \
+        --health-cmd="curl -f http://localhost:8080/v1/.well-known/ready || exit 1" \
+        --health-interval=30s \
+        --health-retries=3 \
+        --health-start-period=10s \
+        -p 8080:8080 \
+        -e QUERY_DEFAULTS_LIMIT=20 \
+        -e AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED="true" \
+        -e PERSISTENCE_DATA_PATH="/var/lib/weaviate" \
+        -e ENABLE_MODULES="text2vec-openai" \
+        -e DEFAULT_VECTORIZER_MODULE="text2vec-openai" \
+        -e OPENAI_APIKEY="${var.openai_api_key}" \
+        -e S3_BUCKET_NAME="${var.faq_csv_bucket_name}" \
+        semitechnologies/weaviate:latest && \
+       /usr/local/bin/boot-setup.sh'
+    ExecStop=/bin/bash -lc 'docker stop weaviate || true'
 
-          # Create FAQ schema if missing
-          docker exec weaviate bash -c "\
-            weaviate-client schema get FAQ > /dev/null 2>&1 || \
-            curl -X POST http://localhost:8080/v1/schema \
-              -H 'Content-Type: application/json' \
-              -d @/tmp/faq_schema.json"
+    [Install]
+    WantedBy=multi-user.target
+    SERVICE
 
-          # Batch ingest CSV (won’t duplicate existing objects)
-          docker exec weaviate bash -c "\
-            curl -X POST \
-              'http://localhost:8080/v1/batch/objects?batchSize=16&class=FAQ&vectorizer=text2vec-openai' \
-              -H 'Content-Type: text/csv' \
-              --data-binary @/tmp/faqs.csv || true"
-
-    # 3) Commands to run on every boot, *after* packages are installed
-    runcmd:
-      # Enable & start Docker
-      - amazon-linux-extras enable docker
-      - systemctl enable --now docker
-
-      # Install AWS CLI v2
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-      - unzip /tmp/awscliv2.zip -d /tmp
-      - /tmp/aws/install
-
-      # Prepare data directory & fetch CSV
-      - mkdir -p /var/lib/weaviate
-      - aws s3 cp s3://${var.faq_csv_bucket_name}/faqs.csv /tmp/faqs.csv
-
-      # Launch Weaviate with auto-restart
-      - docker run -d \
-          --name weaviate \
-          --restart unless-stopped \
-          -p 8080:8080 \
-          -e QUERY_DEFAULTS_LIMIT=20 \
-          -e AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED="true" \
-          -e PERSISTENCE_DATA_PATH="/var/lib/weaviate" \
-          -e ENABLE_MODULES="text2vec-openai" \
-          -e DEFAULT_VECTORIZER_MODULE="text2vec-openai" \
-          -e OPENAI_APIKEY="${var.openai_api_key}" \
-          -e S3_BUCKET_NAME="${var.faq_csv_bucket_name}" \
-          semitechnologies/weaviate:latest
-
-      # Run our schema + data ingestion script
-      - /usr/local/bin/boot-setup.sh
+    # 4️⃣ Enable & start on boot
+    systemctl daemon-reload
+    systemctl enable --now weaviate.service
   EOF
 }
 
