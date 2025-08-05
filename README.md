@@ -89,4 +89,4 @@ I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build
 
     -   Combining BM25 reduces false positives and surfaces exact matches.
 
-#### **Currently under reconstruction*
+#### **Currently under reconstruction -> EC2 instance boot automation pending*
