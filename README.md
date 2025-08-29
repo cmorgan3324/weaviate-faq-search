@@ -3,6 +3,8 @@ FAQ Semantic Search Platform Demo* *(powered by Weaviate & OpenAI)*
 
 I made this FAQ Semantic Search as a proof-of-concept demonstrating how to build a scalable, AI-powered FAQ search system on AWS using Terraform, Weaviate, OpenAI, and Streamlit. For this POC, I based the search system on a FAQs regarding the AWS Cloud. This project showcases end-to-end infrastructure-as-code, real-time vector embeddings, containerization of services (Docker) and a polished front-end.
 
+**Update:**  
+I’m currently automating the EC2 instance boot-up process. This will allow the demo environment (Weaviate + Streamlit container) to start automatically on instance launch, removing the need for manual container activation. Once complete, I’ll be able to simply power on the instance and access the demo site right away.
 
 🔍 Project Overview
 -------------------
