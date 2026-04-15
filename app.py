@@ -15,14 +15,13 @@ st.set_page_config(
 st.title("FAQ Semantic Search")
 st.subheader("Interactive FAQ lookup powered by Weaviate & OpenAI embeddings")
 
-# query input area
-query = st.text_input("Ask a question about AWS...")
+# query input area — form allows Enter key to submit
+with st.form("search_form"):
+    query = st.text_input("Ask a question about AWS...")
+    hybrid = st.checkbox("Use Hybrid Search (BM25 + Vector)", value=False)
+    submitted = st.form_submit_button("Search")
 
-# hybrid toggle
-hybrid = st.checkbox("Use Hybrid Search (BM25 + Vector)", value=False)
-
-# execute search on button click
-if st.button("Search"):
+if submitted:
     if not query.strip():
         st.warning("✋ Please enter a question before searching.")
     else:

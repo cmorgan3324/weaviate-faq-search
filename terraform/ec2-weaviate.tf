@@ -27,13 +27,21 @@ resource "aws_security_group" "weaviate_sg" {
    security_groups = [aws_security_group.streamlit_sg.id] 
 }
 
+  ingress {
+    description = "Weaviate API (8080) from my IP for testing"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["172.226.200.26/32"]
+  }
+
 
   ingress {
     description = "ssh from my ip"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["97.133.199.209/32"]
+    cidr_blocks = ["172.226.200.26/32"]
   }
 
 

@@ -1,0 +1,20 @@
+[Unit]
+Description=Weviate FAQ Streamlit container
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+WorkingDirectory=/home/ec2-user/weviate-faq-search
+ExecStartPre=-/usr/bin/docker stop weaviate-faq
+ExecStartPre=-/usr/bin/docker rm weaviate-faq
+ExecStartPre=/usr/bin/docker build -t weaviate-faq:latest .
+ExecStart=/usr/bin/docker run --rm --name weaviate-faq \
+  -p 8501:8501 \
+  -v /home/ec2-user/weviate-faq-search/.streamlit:/root/.streamlit:ro \
+  weaviate-faq:latest
+ExecStop=/usr/bin/docker stop weaviate-faq
+
+[Install]
+WantedBy=multi-user.target

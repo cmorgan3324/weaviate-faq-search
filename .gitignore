@@ -4,3 +4,12 @@ weaviate-key-pair.pem
 *.tfstate
 *.tfstate.backup
 .DS_Store
+KIRO_SPEC_PROMPT.md
+PROJECT_STATE.md
+RUNBOOK.md
+deploy-local-macos.sh
+deploy-zero-touch.sh
+harden-weaviate.sh
+open-poc.sh
+rollback.sh
+step-5-unblock.md

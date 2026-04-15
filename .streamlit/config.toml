@@ -1,0 +1,5 @@
+[server]
+baseUrlPath = "/faq-search-demo"
+enableCORS = true
+enableXsrfProtection = false
+headless = true
