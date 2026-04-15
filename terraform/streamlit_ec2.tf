@@ -58,27 +58,11 @@ resource "aws_security_group" "streamlit_sg" {
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    description = "HTTP"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "HTTPS"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Streamlit UI (port 8501) - public demo"
+    description = "Streamlit UI (port 8501) from anywhere (testing)"
     from_port   = 8501
     to_port     = 8501
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["97.133.199.209/32"]
   }
 
   ingress {
@@ -86,7 +70,7 @@ resource "aws_security_group" "streamlit_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.226.200.26/32"]
+    cidr_blocks = ["97.133.245.33/32"]
   }
 
 egress {

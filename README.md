@@ -90,8 +90,3 @@ I’m currently automating the EC2 instance boot-up process. This will allow the
     -   Ideal for precise, keyword-driven queries (e.g., "How do I launch an EC2 instance?").
 
     -   Combining BM25 reduces false positives and surfaces exact matches.
-
-
-## License
-
-This project is licensed under the MIT License.

@@ -113,36 +113,3 @@ resource "aws_iam_role_policy_attachment" "streamlit_ecr_readonly" {
   role       = aws_iam_role.streamlit_instance_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
-
-# Route53 permissions for DNS updates
-resource "aws_iam_policy" "route53_dns_update" {
-  name        = "route53-dns-update"
-  description = "Allow updating Route53 DNS records"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = ["route53:ListHostedZonesByName"]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
-        Action = ["route53:ChangeResourceRecordSets"]
-        Resource = "arn:aws:route53:::hostedzone/*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "streamlit_route53_access" {
-  role       = aws_iam_role.streamlit_instance_role.name
-  policy_arn = aws_iam_policy.route53_dns_update.arn
-}
-
-# Allow streamlit instance to access S3 bucket for deployment files
-resource "aws_iam_role_policy_attachment" "streamlit_s3_access" {
-  role       = aws_iam_role.streamlit_instance_role.name
-  policy_arn = aws_iam_policy.weaviate_s3_access.arn
-}

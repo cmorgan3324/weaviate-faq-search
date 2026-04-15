@@ -9,7 +9,7 @@ WEAVIATE_URL = "http://localhost:8080"
 OPENAI_API_KEY = os.getenv("OPENAI_APIKEY")
 
 # embedding model; you can switch to "text-embedding-ada-002" or another
-EMBEDDING_MODEL = "text-embedding-3-small"
+EMBEDDING_MODEL = "text-embedding-ada-002"
 
 # max number of questions per OpenAI batch. 
 # can increase up to ~2048 if you have a large CSV, but keep it small enough to avoid large JSON bodies.
