@@ -3,6 +3,9 @@ weaviate-key-pair.pem
 .terraform/
 *.tfstate
 *.tfstate.backup
+terraform-state-backup.json
+tfplan.out
+tfplan
 .DS_Store
 KIRO_SPEC_PROMPT.md
 PROJECT_STATE.md
